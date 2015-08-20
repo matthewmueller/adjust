@@ -54,6 +54,10 @@ function Adjust (attachment, target, options) {
     position()
   }
 
+  /**
+   * Adjust an attachment relative to a target
+   */
+
   function add (attachment, target, options) {
     adjustments.push([attachment, target, Engine(options)])
     var scrollable = scroll_parent(target)
@@ -93,6 +97,12 @@ function Adjust (attachment, target, options) {
     elapsed = now() - last_tick
   }
 
+  /**
+   * Position the element
+   *
+   * @param {Array} adjustment
+   */
+
   function position (adjustment) {
     var attachment = adjustment[0]
     var target = adjustment[1]
@@ -112,6 +122,10 @@ function Adjust (attachment, target, options) {
     // translate the element
     translate(attachment, x, y)
   }
+
+  /**
+   * Unbind all event listeners
+   */
 
   function unbind () {
     window.removeEventListener('touchmove', tick)
