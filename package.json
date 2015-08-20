@@ -1,0 +1,29 @@
+{
+  "name": "adjust",
+  "version": "0.0.1",
+  "description": "Adjust an element relative to another element",
+  "keywords": [
+    "adjust",
+    "position"
+  ],
+  "author": "Matthew Mueller <mattmuelle@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/MatthewMueller/adjust.git"
+  },
+  "dependencies": {
+    "adjust-engine": "^1.0.1",
+    "computed-style-component": "^0.1.0",
+    "right-now": "^1.0.0",
+    "scrollparent": "^0.1.0",
+    "translate-component": "0.0.1"
+  },
+  "devDependencies": {
+    "domify": "^1.3.3",
+    "mocha": "*",
+    "page": "^1.6.3",
+    "roo": "^0.4.5",
+    "snazzy": "^2.0.1"
+  },
+  "main": "index"
+}
