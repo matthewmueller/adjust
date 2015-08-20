@@ -25,6 +25,7 @@ module.exports = Adjust
 function Adjust (attachment, target, options) {
   var adjustments = []
   var scrollables = []
+  var cache = []
 
   // tick-related
   var last_tick = null
@@ -60,6 +61,12 @@ function Adjust (attachment, target, options) {
 
   function add (attachment, target, options) {
     adjustments.push([attachment, target, Engine(options)])
+
+    // initialize the cache
+    cache.push([0, 0]);
+
+    // listen for scroll events on a scrollable
+    // parent, if it's not the window
     var scrollable = scroll_parent(target)
     if (scrollable !== window) {
       scrollable.addEventListener('scroll', tick)
@@ -103,7 +110,15 @@ function Adjust (attachment, target, options) {
    * @param {Array} adjustment
    */
 
-  function position (adjustment) {
+  function position (adjustment, i) {
+    // calculate the offsets
+    var offset = calculate(adjustment, i)
+
+    // only translate if the offset changed
+    offset && translate(attachment, offset[0], offset[1])
+  }
+
+  function calculate (adjustment, i) {
     var attachment = adjustment[0]
     var target = adjustment[1]
     var engine = adjustment[2]
@@ -119,8 +134,14 @@ function Adjust (attachment, target, options) {
     var x = body.scrollLeft + position.left - rect.left
     var y = body.scrollTop + position.top - rect.top
 
-    // translate the element
-    translate(attachment, x, y)
+    // check to see if the position has even changed
+    if (cache[i][0] == x && cache[i][1] == y) {
+      return false;
+    } else {
+      cache[i][0] = x
+      cache[i][1] = y
+      return [x, y]
+    }
   }
 
   /**
