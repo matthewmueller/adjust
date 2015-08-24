@@ -115,8 +115,16 @@ function Adjust (attachment, target, options) {
     var offset = calculate(adjustment, i)
 
     // only translate if the offset changed
-    offset && translate(attachment, offset[0], offset[1])
+    offset && translate(attachment, Math.round(offset[0]), Math.round(offset[1]))
   }
+
+  /**
+   * Run the calculations
+   *
+   * @param {Array} adjustment
+   * @param {Number} i
+   * @return {Object}
+   */
 
   function calculate (adjustment, i) {
     var attachment = adjustment[0]
