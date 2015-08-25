@@ -1,6 +1,6 @@
 {
   "name": "adjust",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "Adjust an element relative to another element",
   "keywords": [
     "adjust",
@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "adjust-engine": "^2.0.0",
-    "computed-style-component": "^0.1.0",
     "right-now": "^1.0.0",
     "scrollparent": "^0.1.0",
     "translate-component": "0.0.1"
