@@ -26,8 +26,9 @@ It also does more to try and optimize location placement. Some of these things m
 ```js
 var tooltip = document.querySelector('.tooltip')
 var target = document.querySelector('.target')
+var adjust = require('adjust')()
 
-Adjust(tooltip, target, {
+adjust(tooltip, target, {
   attachment: 'bottom middle'
   target: 'top middle',
   offset: {

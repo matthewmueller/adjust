@@ -22,7 +22,7 @@ module.exports = Adjust
  * @param {Object} options
  */
 
-function Adjust (attachment, target, options) {
+function Adjust () {
   var adjustments = []
   var scrollables = []
   var cache = []
@@ -32,27 +32,18 @@ function Adjust (attachment, target, options) {
   var elapsed = null
   var timeout = null
 
-  // add the initial attachment
-  add(attachment, target, options)
-
   // set up the event bindings
   window.addEventListener('touchmove', tick)
   window.addEventListener('scroll', tick)
   window.addEventListener('resize', tick)
 
-  // styling
-  attachment.style.position = 'relative'
-  attachment.style.zIndex = 1000
-  attachment.style.left = '0'
-  attachment.style.top = '0'
-
-  // tick
-  tick()
-
-  return function _Adjust (attachment, target, options) {
-    if (!arguments.length) return unbind()
-    add(attachment, target, options)
-    position()
+  // optimize the remaining adjustments
+  return function adjust (attachment, target, options) {
+    switch (arguments.length) {
+      case 0: return position()
+      case 1: return attachment !== null ? position(attachment) : unbind()
+      default: return add(attachment, target, options) && position(attachment)
+    }
   }
 
   /**
@@ -60,7 +51,14 @@ function Adjust (attachment, target, options) {
    */
 
   function add (attachment, target, options) {
-    adjustments.push([attachment, target, Engine(options)])
+    var adjustment = [attachment, target, Engine(options)];
+    adjustments.push(adjustment)
+
+    // styling
+    attachment.style.position = 'relative'
+    attachment.style.zIndex = 1000
+    attachment.style.left = '0'
+    attachment.style.top = '0'
 
     // initialize the cache
     cache.push([0, 0]);
@@ -71,6 +69,8 @@ function Adjust (attachment, target, options) {
     if (scrollable !== window) {
       scrollable.addEventListener('scroll', tick)
     }
+
+    return adjustment;
   }
 
   /**
@@ -100,22 +100,27 @@ function Adjust (attachment, target, options) {
     }
 
     last_tick = now()
-    adjustments.map(position)
+    position()
     elapsed = now() - last_tick
   }
 
   /**
    * Position the element
    *
-   * @param {Array} adjustment
+   * @param {Element} attachment
    */
 
-  function position (adjustment, i) {
-    // calculate the offsets
-    var offset = calculate(adjustment, i)
+  function position (attachment) {
+    adjustments.forEach(function(adjustment, i) {
+      // calculate one or all
+      if (attachment && attachment != adjustment[0]) return;
 
-    // only translate if the offset changed
-    offset && translate(attachment, Math.round(offset[0]), Math.round(offset[1]))
+      // calculate the offsets
+      var offset = calculate(adjustment, i)
+
+      // only translate if the offset changed
+      offset && translate(adjustment[0], Math.round(offset[0]), Math.round(offset[1]))
+    });
   }
 
   /**
@@ -131,16 +136,20 @@ function Adjust (attachment, target, options) {
     var target = adjustment[1]
     var engine = adjustment[2]
 
-    var attachment_position = attachment.getBoundingClientRect()
-    var target_position = target.getBoundingClientRect()
+    var attachment_position = rect(attachment)
+    var target_position = rect(target)
 
     // calculate the updated position
     var position = engine(attachment_position, target_position, viewport())
-    var rect = offset(attachment)
+    var parent = scroll_parent(attachment)
+    var off = offset(attachment)
+
+    var scroll_left = parent.scrollLeft || 0
+    var scroll_top = parent.scrollTop || 0
 
     // calculate the offsets
-    var x = body.scrollLeft + position.left - rect.left
-    var y = body.scrollTop + position.top - rect.top
+    var x = scroll_left + position.left - off.left
+    var y = scroll_top + position.top - off.top
 
     // check to see if the position has even changed
     if (cache[i][0] == x && cache[i][1] == y) {
@@ -165,6 +174,28 @@ function Adjust (attachment, target, options) {
     scrollables.map(function (scrollable) {
       scrollable.removeEventListener('resize', tick)
     })
+  }
+}
+
+/**
+ * Properly get the bounding box
+ *
+ * @param {Element} el
+ * @return {Object}
+ */
+
+function rect (el) {
+  var box = el.getBoundingClientRect()
+  var scrollTop = window.scrollY
+  var scrollLeft = window.scrollX
+
+  return {
+    top: box.top + scrollTop,
+    right: box.right + scrollLeft,
+    left: box.left + scrollLeft,
+    bottom: box.bottom + scrollTop,
+    width: box.width,
+    height: box.height
   }
 }
 

@@ -1,5 +1,5 @@
 development:
-	@PORT=5000 ./node_modules/.bin/roo examples/index.js examples/index.css
+	@PORT=5001 ./node_modules/.bin/roo examples/index.js examples/index.css
 
 test:
 	@./node_modules/.bin/mocha \

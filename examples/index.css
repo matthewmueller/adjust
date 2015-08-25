@@ -33,7 +33,7 @@ body {
 
 .scrolling {
   .wrapper {
-    margin: 0 auto;
+    margin: 200px auto;
     width: 500px;
     height: 500px;
     overflow-y: scroll;
@@ -46,7 +46,6 @@ body {
   }
 
   .child {
-    position: absolute;
     background: blue;
     height: 50px;
     width: 50px;
@@ -92,6 +91,45 @@ body {
     &:last-child {
       border-bottom: 1px solid #ccc;
     }
+  }
+
+  .child,
+  .child-two {
+    background: blue;
+    padding: 20px;
+    color: white;
+    width: 100px;
+  }
+}
+
+.relative {
+  .wrapper {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: 300px;
+    left: 300px;
+    background: light-green;
+  }
+
+  .parent {
+    width: 100px;
+    height: 100px;
+    margin: 0;
+    padding: 0;
+    background: red;
+    position: relative;
+    top: 50px;
+    left: 50px;
+  }
+
+  .inner-wrapper {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    top: 100px;
+    left: 100px;
+    background: salmon;
   }
 
   .child {
