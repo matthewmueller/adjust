@@ -9,6 +9,12 @@ var now = require('right-now')
 var body = document.body
 
 /**
+ * Get the scrollbar size
+ */
+
+var scrollbars = get_scrollbar_size()
+
+/**
  * Export `Adjust`
  */
 
@@ -240,7 +246,41 @@ function viewport () {
   return {
     top: 0,
     left: 0,
-    right: width,
-    bottom: height
+    right: width - scrollbars[0],
+    bottom: height - scrollbars[1]
   }
 }
+
+/**
+ * Get the scroll bar size
+ *
+ * @return {Array}
+ */
+
+function get_scrollbar_size () {
+   var inner = document.createElement('p')
+   inner.style.width = '100%'
+   inner.style.height = '100%'
+
+   var outer = document.createElement('div')
+   outer.style.position = 'absolute'
+   outer.style.top = '0px'
+   outer.style.left = '0px'
+   outer.style.visibility = 'hidden'
+   outer.style.width = '100px'
+   outer.style.height = '100px'
+   outer.style.overflow = 'hidden'
+   outer.appendChild(inner)
+   document.body.appendChild(outer)
+
+   var w1 = inner.offsetWidth
+   var h1 = inner.offsetHeight
+   outer.style.overflow = 'scroll'
+   var w2 = inner.offsetWidth
+   var h2 = inner.offsetHeight
+   if (w1 == w2) w2 = outer.clientWidth
+   if (h1 == h2) h2 = outer.clientHeight
+   document.body.removeChild(outer)
+
+   return [(w1 - w2), (h1 - h2)]
+};
