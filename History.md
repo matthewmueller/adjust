@@ -1,4 +1,9 @@
 
+2.0.2 / 2015-08-31
+==================
+
+  * bump adjust-engine and fetch the scrollbar size
+
 2.0.1 / 2015-08-31
 ==================
 
