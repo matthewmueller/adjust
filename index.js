@@ -119,7 +119,10 @@ function Adjust () {
       var offset = calculate(adjustment, i)
 
       // only translate if the offset changed
-      offset && translate(adjustment[0], Math.round(offset[0]), Math.round(offset[1]))
+      if (offset) {
+        translate(adjustment[0], Math.round(offset[0]), Math.round(offset[1]))
+        adjustment[0].setAttribute('orientation', offset[2])
+      }
     });
   }
 
@@ -157,7 +160,7 @@ function Adjust () {
     } else {
       cache[i][0] = x
       cache[i][1] = y
-      return [x, y]
+      return [x, y, position.orientation]
     }
   }
 
