@@ -1,4 +1,9 @@
 
+2.1.0 / 2015-09-01
+==================
+
+  * changing positioning based on scrolling and resizing is unreliable. much more fruitful to improve performance of positioning loop
+
 2.0.3 / 2015-08-31
 ==================
 
