@@ -41,6 +41,7 @@ body {
 
   .parent {
     background: whiteSmoke;
+    position: relative;
     height: 1000px;
     width: 100%;
   }
@@ -54,7 +55,9 @@ body {
 
 .flip {
   .parent {
+    position: relative;
     width: 600px;
+    height: 100px;
     background: salmon;
     margin-left: 500px;
     margin-top: 300px;

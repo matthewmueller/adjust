@@ -61,7 +61,7 @@ function Adjust () {
     adjustments.push(adjustment)
 
     // styling
-    attachment.style.position = 'relative'
+    attachment.style.position = 'absolute'
     attachment.style.zIndex = 1000
     attachment.style.left = '0'
     attachment.style.top = '0'
