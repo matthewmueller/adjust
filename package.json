@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "adjust-engine": "^2.0.4",
+    "component-raf": "^1.2.0",
     "right-now": "^1.0.0",
     "scrollparent": "^0.1.0",
     "translate-component": "0.0.1"

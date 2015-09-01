@@ -5,8 +5,8 @@
 var translate = require('translate-component')
 var scroll_parent = require('scrollparent')
 var Engine = require('adjust-engine')
+var raf = require('component-raf')
 var now = require('right-now')
-var body = document.body
 
 /**
  * Get the scrollbar size
@@ -30,18 +30,15 @@ module.exports = Adjust
 
 function Adjust () {
   var adjustments = []
-  var scrollables = []
   var cache = []
 
   // tick-related
   var last_tick = null
-  var elapsed = null
   var timeout = null
+  var ticking = true
 
-  // set up the event bindings
-  window.addEventListener('touchmove', tick)
-  window.addEventListener('scroll', tick)
-  window.addEventListener('resize', tick)
+  // start ticking
+  tick()
 
   // optimize the remaining adjustments
   return function adjust (attachment, target, options) {
@@ -69,13 +66,6 @@ function Adjust () {
     // initialize the cache
     cache.push([0, 0]);
 
-    // listen for scroll events on a scrollable
-    // parent, if it's not the window
-    var scrollable = scroll_parent(target)
-    if (scrollable !== window) {
-      scrollable.addEventListener('scroll', tick)
-    }
-
     return adjustment;
   }
 
@@ -86,28 +76,19 @@ function Adjust () {
    */
 
   function tick () {
-    // We voluntarily throttle ourselves if we can't manage 60fps
-    if (elapsed > 16) {
-      elapsed = Math.min(elapsed - 16, 250)
-
-      // Just in case this is the last event, remember to position just once more
-      timeout = setTimeout(tick, 250)
-      return
-    }
+    if (!ticking) return
 
     // Some browsers call events a little too frequently, refuse to run more than is reasonable
     if (last_tick && (now() - last_tick) < 10) {
+      raf(tick)
       return
-    }
-
-    if (timeout) {
-      clearTimeout(timeout)
-      timeout = null
     }
 
     last_tick = now()
     position()
-    elapsed = now() - last_tick
+
+    // tick again...
+    raf(tick)
   }
 
   /**
@@ -171,18 +152,11 @@ function Adjust () {
   }
 
   /**
-   * Unbind all event listeners
+   * Stop ticking
    */
 
   function unbind () {
-    window.removeEventListener('touchmove', tick)
-    window.removeEventListener('scroll', tick)
-    window.removeEventListener('resize', tick)
-
-    // unbind from scrollables
-    scrollables.map(function (scrollable) {
-      scrollable.removeEventListener('resize', tick)
-    })
+    ticking = false
   }
 }
 
