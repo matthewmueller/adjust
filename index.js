@@ -80,7 +80,7 @@ function Adjust () {
 
     // Some browsers call events a little too frequently, refuse to run more than is reasonable
     if (last_tick && (now() - last_tick) < 10) {
-      raf(tick)
+      raf.call(window, tick)
       return
     }
 
@@ -88,7 +88,7 @@ function Adjust () {
     position()
 
     // tick again...
-    raf(tick)
+    raf.call(window, tick)
   }
 
   /**
