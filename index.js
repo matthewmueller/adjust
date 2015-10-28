@@ -169,8 +169,8 @@ function Adjust () {
 
 function rect (el) {
   var box = el.getBoundingClientRect()
-  var scrollTop = window.scrollY
-  var scrollLeft = window.scrollX
+  var scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft
 
   return {
     top: box.top + scrollTop,
