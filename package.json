@@ -19,10 +19,10 @@
     "translate-component": "0.0.1"
   },
   "devDependencies": {
+    "budo": "9.2.1",
     "domify": "^1.3.3",
     "mocha": "*",
     "page": "^1.6.3",
-    "roo": "^0.4.5",
     "snazzy": "^2.0.1"
   },
   "main": "index"

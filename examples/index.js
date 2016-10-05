@@ -12,7 +12,6 @@ page('/', function () {
   var child = parent.firstChild
   document.body.appendChild(wrapper)
   document.body.className = 'index'
-
   adjust(child, parent)
 })
 
@@ -64,7 +63,18 @@ page('/tooltip', function () {
   })
 })
 
-page('/relative', function() {
+page('/sidebar', function () {
+  var child = domify('<div class="child">hello!</div>')
+  document.body.appendChild(child)
+  document.body.className = 'sidebar'
+
+  adjust(child, document.body, {
+    attachment: 'center middle',
+    target: 'left top'
+  })
+})
+
+page('/relative', function () {
   var wrapper = domify('<div class="wrapper"><div class="inner-wrapper"><div class="parent"><div class="child"></div></div></div></div>')
   var parent = wrapper.querySelector('.parent')
   var child = parent.firstChild
@@ -77,4 +87,3 @@ page('/relative', function() {
 })
 
 page.start()
-
